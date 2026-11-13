@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>District Stories RP — Community Helper</title>
+<style>
+:root{--bg:#080b10;--panel:#0e141d;--panel2:#111a26;--line:#1d2a3a;--muted:#8492a6;--text:#e8eef7;--blue:#72a9ff;--blue2:#397edb;--gold:#d4a65c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1a2a40 0,#080b10 48%);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,Segoe UI,Arial}
+button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:1200px;margin:auto;padding:0 22px}
+header{position:sticky;top:0;z-index:10;background:#080b10eF;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:.08em}.logo{width:39px;height:39px;border:1px solid #4779b5;border-radius:50%;display:grid;place-items:center;color:#c9e0ff;background:linear-gradient(145deg,#1d3c61,#0a1422);font-size:11px;font-weight:900}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.18em}
+nav{display:flex;gap:5px;flex-wrap:wrap}nav a{color:#9ba9bc;text-decoration:none;padding:9px 11px;border-radius:7px;font-size:12px}nav a:hover,nav a.active{background:#182638;color:#dceaff}
+.hero{min-height:330px;display:flex;align-items:center;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#080b10 0%,#080b10d9 45%,#080b1070),url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1800&q=80') center 45%/cover;opacity:.36}.hero-content{position:relative;padding:48px 0 42px;max-width:700px}.eyebrow{color:var(--blue);font-size:10px;font-weight:800;letter-spacing:.24em;text-transform:uppercase}.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.02;letter-spacing:-.045em;margin:12px 0}.hero p{max-width:570px;color:#a9b6c7;margin:0 0 22px}.actions{display:flex;gap:9px;flex-wrap:wrap}.btn{border:1px solid #30445e;background:#172538;color:#e8f2ff;padding:10px 14px;border-radius:7px;font-weight:700;font-size:12px}.btn.primary{background:linear-gradient(135deg,#4a8de4,#2e65ad);border-color:#5b9ae9}.btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+main{padding:26px 0 70px}.section{margin:0 0 34px;scroll-margin-top:90px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:14px;flex-wrap:wrap}.section h2{font-size:22px;letter-spacing:-.025em;margin:0}.section-head p{margin:4px 0 0;color:var(--muted);font-size:12px}.tag{font-size:10px;color:#9fc6ff;background:#15263b;border:1px solid #29496e;border-radius:20px;padding:5px 9px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{background:linear-gradient(160deg,#111a26,#0c1119);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}.card h3{font-size:14px;margin:0 0 6px}.card p{font-size:12px;color:var(--muted);margin:0}.card .mini{font-size:10px;color:var(--blue);font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.panel{background:#0b1119;border:1px solid var(--line);border-radius:10px;overflow:hidden}.panel-top{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-top strong{font-size:13px}.panel-body{padding:16px}
+
+/* CRATE / RANDOM WHEEL STYLES */
+.crate-section{background:linear-gradient(180deg,#0a0f17 0%,#070a0f 100%);border:1px solid var(--line);border-radius:14px;padding:24px 22px;position:relative;overflow:hidden}
+.crate-topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.pill-switch{display:inline-flex;background:#0d131c;border:1px solid #1e2b3c;border-radius:12px;padding:5px;gap:4px}
+.pill-switch button{border:0;background:transparent;color:#8492a6;font-size:11px;font-weight:800;letter-spacing:.08em;padding:9px 16px;border-radius:8px;text-transform:uppercase;transition:.18s}
+.pill-switch button:hover{color:#dceaff}
+.pill-switch button.active{background:#dce3ec;color:#080b10;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+.crate-title-block{text-align:center;flex:1;min-width:220px}
+.crate-eyebrow{font-size:10px;font-weight:800;letter-spacing:.22em;color:#8492a6;text-transform:uppercase;margin-bottom:4px}
+.crate-title{font-size:clamp(26px,4vw,38px);font-weight:950;letter-spacing:-.03em;margin:0;line-height:1;color:#ffffff;text-transform:uppercase}
+.reel-viewport{position:relative;width:100%;overflow:hidden;padding:12px 0;margin-bottom:16px;border-radius:10px;background:#06090e;border:1px solid #151f2c}
+.reel-viewport::before,.reel-viewport::after{content:"";position:absolute;top:0;bottom:0;width:64px;z-index:3;pointer-events:none}
+.reel-viewport::before{left:0;background:linear-gradient(90deg,#06090e 15%,transparent)}
+.reel-viewport::after{right:0;background:linear-gradient(270deg,#06090e 15%,transparent)}
+.reel-pointer{position:absolute;top:0;bottom:0;left:50%;width:2px;background:linear-gradient(180deg,var(--blue),#ffffff,var(--blue));transform:translateX(-50%);z-index:4;box-shadow:0 0 14px var(--blue)}
+.reel-pointer::before,.reel-pointer::after{content:"";position:absolute;left:50%;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent}
+.reel-pointer::before{top:0;border-top:8px solid #ffffff}
+.reel-pointer::after{bottom:0;border-bottom:8px solid #ffffff}
+.reel-track{display:flex;gap:12px;will-change:transform;padding-left:calc(50% - 76px)}
+.reel-card{flex:0 0 152px;height:164px;background:#0c121b;border:1px solid #1c2838;border-radius:12px;padding:12px 10px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;transition:border-color .2s,box-shadow .2s,background .2s;user-select:none}
+.reel-card.winner{border:2px solid #e8eef7;background:linear-gradient(180deg,#162336 0%,#0d1522 100%);box-shadow:0 0 24px rgba(114,169,255,.32);transform:scale(1.03)}
+.reel-badge-box{width:84px;height:66px;border-radius:9px;background:#080c12;border:1px solid #192434;display:grid;place-items:center;position:relative}
+.gun-emblem{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:11px;letter-spacing:.05em;border:2px solid #355070;background:radial-gradient(circle,#1e324d,#0b131f);color:#b7d4fa}
+.gun-emblem.t0{border-color:#535d6e;background:radial-gradient(circle,#2c3340,#11151c);color:#cbd5e1}
+.gun-emblem.t1{border-color:#3b6ea5;background:radial-gradient(circle,#1a3657,#0b1524);color:#93c5fd}
+.gun-emblem.t2{border-color:#9e7836;background:radial-gradient(circle,#453416,#171107);color:#fcd34d}
+.gun-emblem.t3{border-color:#a33952;background:radial-gradient(circle,#4a1824,#17070b);color:#fda4af}
+.reel-name{font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.reel-sub{font-size:10px;color:#8492a6;font-weight:600}
+.roll-bar-btn{width:100%;height:52px;border:0;border-radius:10px;background:#e6ebf2;color:#080b10;font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;transition:.16s;box-shadow:0 4px 18px rgba(0,0,0,.35)}
+.roll-bar-btn:hover:not(:disabled){background:#ffffff;transform:translateY(-1px)}
+.roll-bar-btn:disabled{opacity:.55;cursor:not-allowed}
+.winner-banner{margin-top:14px;padding:12px 16px;border-radius:9px;background:#0d1520;border:1px solid #22344a;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.winner-banner strong{color:#ffffff;font-size:14px}
+.winner-stats{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:#a9b6c7}
+
+.table{width:100%;border-collapse:collapse;font-size:12px}.table th{text-align:left;color:#91a2b8;font-weight:700;background:#101925}.table th,.table td{padding:11px 13px;border-bottom:1px solid #1b2735}.table tr:last-child td{border-bottom:0}.table td{color:#d1dbe8}.pill{display:inline-block;background:#182b40;color:#a9ceff;border:1px solid #294767;border-radius:5px;padding:3px 7px;font-size:10px;font-weight:600}
+.pill.t0{background:#242933;color:#b8c4d4;border-color:#3a4352}
+.pill.t1{background:#182b40;color:#8cc0ff;border-color:#29496e}
+.pill.t2{background:#2b2314;color:#e6b86a;border-color:#544222}
+.pill.t3{background:#2e161d;color:#ff8fa8;border-color:#5c2836}
+.pill.auto{background:#2b1936;color:#d69eff;border-color:#522d69}
+.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.catalog-item{padding:14px;border:1px solid var(--line);background:#0e151f;border-radius:8px}.catalog-item strong{display:block;font-size:12px;margin-bottom:4px}.catalog-item span{font-size:11px;color:var(--muted)}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tab-btn{border:1px solid #27364a;background:#0e151f;color:#9ba9bc;padding:7px 12px;border-radius:6px;font-size:11px;font-weight:700}
+.tab-btn:hover,.tab-btn.active{background:#1c2e45;color:#e8f2ff;border-color:#4470a8}
+.weapon-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.weapon-item{padding:15px;border:1px solid var(--line);background:linear-gradient(165deg,#101824,#0b1017);border-radius:8px;display:flex;flex-direction:column;justify-content:space-between}
+.weapon-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}
+.weapon-item strong{font-size:14px;color:#e8f2ff}
+.weapon-sub{font-size:11px;color:var(--muted);margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#080c12;border:1px solid #182332;border-radius:6px;padding:8px;margin-bottom:10px}
+.stat-box{text-align:center}
+.stat-box small{display:block;font-size:9px;color:#73849c;text-transform:uppercase;letter-spacing:.05em}
+.stat-box b{font-size:12px;color:#d5e4f7}
+.weapon-badges{display:flex;gap:5px;flex-wrap:wrap}
+.muted{color:var(--muted);font-size:12px}.field{background:#080d14;border:1px solid #27364a;color:var(--text);border-radius:6px;padding:9px 10px;min-width:0}
+.notice{border:1px solid #4b3d26;background:#1b1710;color:#cbb58e;padding:12px 14px;border-radius:8px;font-size:11px;margin-top:12px;line-height:1.6}
+.notice ul{margin:6px 0 0;padding-left:18px}
+footer{border-top:1px solid var(--line);padding:22px 0;color:#69788c;font-size:11px}.search{width:min(240px,100%)}
+@media(max-width:850px){.grid,.grid-4{grid-template-columns:repeat(2,1fr)}.catalog,.weapon-catalog{grid-template-columns:repeat(2,1fr)}nav{display:none}.crate-topbar{justify-content:center}}
+@media(max-width:560px){.wrap{padding:0 14px}.hero{min-height:300px}.grid,.grid-4,.catalog,.weapon-catalog{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}.search{width:100%}.table{min-width:560px}.table-wrap{overflow:auto}.pill-switch button{padding:8px 11px;font-size:10px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+ <div class="brand"><div class="logo">DS</div><div>DISTRICT STORIES<small>ROLEPLAY COMMUNITY HELPER</small></div></div>
+ <nav>
+   <a class="active" href="#home">Home</a>
+   <a href="#wheel">Randomizer</a>
+   <a href="#skills">Skills</a>
+   <a href="#weapon-catalog">Weapons &amp; Tiers</a>
+   <a href="#catalog">Catalog</a>
+ </nav>
+</div></header>
+<section class="hero" id="home"><div class="wrap hero-content">
+ <div class="eyebrow">Community resource · RP toolkit</div><h1>District Stories<br>Roleplay Helper</h1>
+ <p>A central hub for character progression, roleplay references, weapon stats, tier crate randomizers, and community information. Built for stories first.</p>
+ <div class="actions">
+   <a class="btn primary" href="#wheel">Open weapon wheel</a>
+   <a class="btn" href="#weapon-catalog">Weapons &amp; Tiers</a>
+   <a class="btn" href="#skills">View skill information</a>
+ </div>
+</div></section>
+<main class="wrap">
+<section class="section" id="overview"><div class="section-head"><div><h2>Community dashboard</h2><p>Quick access to the main tools and reference sections.</p></div><span class="tag">RP Toolkit</span></div>
+<div class="grid">
+ <article class="card"><div class="mini">01 / Tools</div><h3>Weapon Wheel</h3><p>Switch between Tier 0, Tier 1, Tier 2, and Tier 3 pools and spin the horizontal reel.</p></article>
+ <article class="card"><div class="mini">02 / Progression</div><h3>Skill information</h3><p>Review example skill tiers and character development categories.</p></article>
+ <article class="card"><div class="mini">03 / Armory</div><h3>Weapons &amp; Tiers</h3><p>Browse full damage, ammo, fire gap, spread, recoil, and tier classifications.</p></article>
+</div></section>
+
+<!-- WEAPON-ONLY TIER RANDOM WHEEL -->
+<section class="section" id="wheel">
+  <div class="crate-section">
+    <div class="crate-topbar">
+      <div class="pill-switch" aria-label="Category">
+        <button class="active" type="button">FIREARMS</button>
+      </div>
+
+      <div class="crate-title-block">
+        <div class="crate-eyebrow">DISTRICT STORIES · ARMORY</div>
+        <h2 class="crate-title">RANDOM WHEEL</h2>
+      </div>
+
+      <div class="pill-switch" id="wheelTierSwitch" aria-label="Select Weapon Tier">
+        <button type="button" data-tier="Tier 0">TIER 0</button>
+        <button type="button" class="active" data-tier="Tier 1">TIER 1</button>
+        <button type="button" data-tier="Tier 2">TIER 2</button>
+        <button type="button" data-tier="Tier 3">TIER 3</button>
+      </div>
+    </div>
+
+    <div class="reel-viewport" id="reelViewport">
+      <div class="reel-pointer"></div>
+      <div class="reel-track" id="reelTrack"></div>
+    </div>
+
+    <button class="roll-bar-btn" id="rollBtn" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/></svg>
+      <span id="rollBtnText">ROLL RANDOM</span>
+    </button>
+
+    <div class="winner-banner" id="winnerBanner">
+      <div>
+        <span class="muted" style="display:block;font-size:10px;text-transform:uppercase;letter-spacing:.1em">Selected / Landed Weapon</span>
+        <strong id="winnerName">Select a tier &amp; press Roll Random</strong>
+      </div>
+      <div class="winner-stats" id="winnerStats">
+        <span class="pill t1">Tier 1 Ready</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="skills"><div class="section-head"><div><h2>Skill information</h2><p>Example progression framework for roleplay characters.</p></div><input class="field search" id="skillSearch" placeholder="Search skills…"></div>
+<div class="panel"><div class="panel-top"><strong>Character skill tiers</strong><span class="pill">REFERENCE</span></div><div class="table-wrap"><table class="table" id="skillTable"><thead><tr><th>Level</th><th>Tier</th><th>Focus</th><th>RP description</th></tr></thead><tbody>
+<tr><td>1</td><td><span class="pill">Beginner</span></td><td>Foundations</td><td>Learning the basics through everyday scenes.</td></tr>
+<tr><td>3</td><td><span class="pill">Developing</span></td><td>Consistency</td><td>Building believable habits and character routines.</td></tr>
+<tr><td>5</td><td><span class="pill">Experienced</span></td><td>Specialization</td><td>Showing experience through story and interaction.</td></tr>
+<tr><td>7</td><td><span class="pill">Advanced</span></td><td>Expertise</td><td>Demonstrating a defined character specialty.</td></tr>
+<tr><td>10</td><td><span class="pill">Veteran</span></td><td>Mastery</td><td>A long-running character arc with earned depth.</td></tr>
+</tbody></table></div></div>
+<div class="grid-4" style="margin-top:11px"><div class="card"><h3>Faction roleplay</h3><p>Team identity, shared history, internal relationships, and scene continuity.</p></div><div class="card"><h3>Social skills</h3><p>Conversation, negotiation, conflict resolution, and building connections.</p></div><div class="card"><h3>Creative skills</h3><p>Music, business ownership, storytelling, and community contribution.</p></div><div class="card"><h3>Life skills</h3><p>Work history, education, hobbies, and everyday character routines.</p></div></div>
+</section>
+
+<!-- WEAPONS & TIERS CATALOG -->
+<section class="section" id="weapon-catalog">
+ <div class="section-head">
+   <div><h2>Weapons &amp; Tier Catalog</h2><p>Full GunModule stats (Damage, Ammo, Mag, Fire Gap, Spread, Recoil) organized by Tier.</p></div>
+   <div class="filter-bar">
+     <button class="tab-btn active" data-tier="all">All</button>
+     <button class="tab-btn" data-tier="Tier 0">Tier 0</button>
+     <button class="tab-btn" data-tier="Tier 1">Tier 1</button>
+     <button class="tab-btn" data-tier="Tier 2">Tier 2</button>
+     <button class="tab-btn" data-tier="Tier 3">Tier 3</button>
+     <input class="field search" id="weaponSearch" placeholder="Search name, ammo, tier…">
+   </div>
+ </div>
+ <div class="weapon-catalog" id="weaponGrid"></div>
+ <div class="notice">
+   <strong>GunModule &amp; Gameplay Notes:</strong>
+   <ul>
+     <li><strong>Automatic Fire:</strong> Kruger SR40 and Micro Drago are set to fire automatically at 1 shot per 0.05 s.</li>
+     <li><strong>38 Special:</strong> Uses <code>.380 ACP</code> ammo even though it's a .38 (possible config mismatch).</li>
+     <li><strong>Headshots:</strong> The game features one-shot headshots, overriding standard body damage numbers.</li>
+     <li><strong>Ruger LCP:</strong> Uses an older legacy script not included in this stats table.</li>
+     <li><strong>Config Path:</strong> Edit <code>ReplicatedStorage.Resource.Modules.GunModule</code> to adjust weapon values.</li>
+   </ul>
+ </div>
+</section>
+
+<section class="section" id="catalog"><div class="section-head"><div><h2>Roleplay catalog</h2><p>Fictional inventory props and cosmetic references for storytelling.</p></div><input class="field search" id="catalogSearch" placeholder="Search catalog…"></div>
+<div class="catalog" id="catalogGrid">
+ <div class="catalog-item"><strong>Phone</strong><span>Communication prop · Everyday</span></div><div class="catalog-item"><strong>Wallet</strong><span>Personal item · Everyday</span></div>
+ <div class="catalog-item"><strong>Camera</strong><span>Creative prop · Utility</span></div><div class="catalog-item"><strong>Notebook</strong><span>Personal item · Everyday</span></div>
+ <div class="catalog-item"><strong>Headphones</strong><span>Cosmetic prop · Lifestyle</span></div><div class="catalog-item"><strong>Music player</strong><span>Cosmetic prop · Lifestyle</span></div>
+ <div class="catalog-item"><strong>Backpack</strong><span>Accessory · Clothing</span></div><div class="catalog-item"><strong>Sports bag</strong><span>Accessory · Recreation</span></div>
+ <div class="catalog-item"><strong>Skateboard</strong><span>Recreation prop · Hobby</span></div><div class="catalog-item"><strong>Basketball</strong><span>Recreation prop · Sports</span></div>
+ <div class="catalog-item"><strong>Instrument case</strong><span>Music prop · Creative</span></div><div class="catalog-item"><strong>Business folder</strong><span>Story prop · Career</span></div>
+</div><div class="notice">This sample catalog intentionally focuses on harmless fictional props and cosmetic roleplay references. Replace or expand entries to match your server's approved item list.</div>
+</section>
+</main>
+<footer><div class="wrap" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span>DISTRICT STORIES RP HELPER · COMMUNITY TOOL</span><span>Independent project · GunModule reference</span></div></footer>
+<script>
+const weapons = [
+  // Tier 0
+  { name: "Knife", family: "Melee", tier: "Tier 0", ammo: "None", damage: "Melee", mag: "—", fireGap: "—", spread: "—", recoil: "—", auto: false, code: "KNF" },
+  { name: "Bat", family: "Melee", tier: "Tier 0", ammo: "None", damage: "Melee", mag: "—", fireGap: "—", spread: "—", recoil: "—", auto: false, code: "BAT" },
+  { name: "38 Special", family: "Other Pistols", tier: "Tier 0", ammo: ".380 ACP", damage: 23, mag: 6, fireGap: "0.35 s", spread: "0–0.5", recoil: 0.0195, auto: false, code: ".38" },
+
+  // Tier 1
+  { name: "Block 29", family: "Other Pistols", tier: "Tier 1", ammo: "9mm", damage: 33, mag: 10, fireGap: "0.65 s", spread: "0–0.5", recoil: 0.0125, auto: false, code: "B29" },
+  { name: "Glock 26 (Block)", family: "Other Pistols", tier: "Tier 1", ammo: "9mm", damage: 24, mag: 10, fireGap: "0.27 s", spread: "0–0.7", recoil: 0.0095, auto: false, code: "G26B" },
+  { name: "Springfield B-Cat", family: "Glock Family", tier: "Tier 1", ammo: "9mm", damage: 28, mag: 11, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "BCAT" },
+  { name: "Glock 43x", family: "Glock Family", tier: "Tier 1", ammo: "9mm", damage: 28, mag: 10, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G43X" },
+  { name: "Glock 27 Gen 4", family: "Glock Family", tier: "Tier 1", ammo: ".40 S&W", damage: 30, mag: 9, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G27" },
+  { name: "Glock 26 Gen 3 / 4", family: "Glock Family", tier: "Tier 1", ammo: "9mm", damage: 28, mag: 10, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G26" },
+
+  // Tier 2
+  { name: "Glock 20 Gen 4", family: "Glock Family", tier: "Tier 2", ammo: "10mm", damage: 32, mag: 15, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G20" },
+  { name: "Glock 40 Gen 4", family: "Glock Family", tier: "Tier 2", ammo: "10mm", damage: 32, mag: 15, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G40" },
+  { name: "Glock 22 Gen 4", family: "Glock Family", tier: "Tier 2", ammo: ".40 S&W", damage: 30, mag: 15, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G22" },
+  { name: "Glock 23 Gen 5", family: "Glock Family", tier: "Tier 2", ammo: ".40 S&W", damage: 30, mag: 13, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G23" },
+  { name: "Glock 41 Gen 4", family: "Glock Family", tier: "Tier 2", ammo: ".45 ACP", damage: 33, mag: 13, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G41" },
+  { name: "Glock 49 Gen 5", family: "Glock Family", tier: "Tier 2", ammo: "9mm", damage: 28, mag: 15, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G49" },
+  { name: "Glock 19 Gen 5", family: "Glock Family", tier: "Tier 2", ammo: "9mm", damage: 28, mag: 15, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G19" },
+  { name: "Taurus G2c", family: "Glock Family", tier: "Tier 2", ammo: "9mm", damage: 28, mag: 12, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G2C" },
+  { name: "Rapture", family: "Other Pistols", tier: "Tier 2", ammo: "9mm", damage: 27, mag: 15, fireGap: "0.28 s", spread: "0–0.5", recoil: 0.009, auto: false, code: "RPT" },
+  { name: "Polymer80", family: "Other Pistols", tier: "Tier 2", ammo: "9mm", damage: 25, mag: 17, fireGap: "0.26 s", spread: "0–0.6", recoil: 0.0085, auto: false, code: "P80" },
+  { name: "Block 20", family: "Other Pistols", tier: "Tier 2", ammo: "9mm", damage: 29, mag: 15, fireGap: "0.35 s", spread: "0–0.5", recoil: 0.0105, auto: false, code: "B20" },
+  { name: "JA9", family: "Other Pistols", tier: "Tier 2", ammo: "9mm", damage: 26, mag: 10, fireGap: "0.3 s", spread: "0–0.5", recoil: 0.0105, auto: false, code: "JA9" },
+
+  // Tier 3
+  { name: "Micro Drago", family: "Other Pistols", tier: "Tier 3", ammo: "9mm", damage: 38, mag: 30, fireGap: "0.05 s", spread: "0–0.6", recoil: 0.0095, auto: true, code: "DRG" },
+  { name: "Kruger SR40", family: "Other Pistols", tier: "Tier 3", ammo: ".40 S&W", damage: 30, mag: 15, fireGap: "0.25 s (0.05s Auto)", spread: "0–0.5", recoil: 0.01, auto: true, code: "SR40" },
+  { name: "Kruger SR45", family: "Other Pistols", tier: "Tier 3", ammo: ".45 ACP", damage: 34, mag: 10, fireGap: "0.4 s", spread: "0–0.5", recoil: 0.011, auto: false, code: "SR45" },
+  { name: "PSA Blocker", family: "Other Pistols", tier: "Tier 3", ammo: "9mm", damage: 25, mag: 17, fireGap: "0.1 s", spread: "0–0.5", recoil: 0.0075, auto: false, code: "PSAB" },
+  { name: "Block Custom", family: "Other Pistols", tier: "Tier 3", ammo: "9mm", damage: 25, mag: 17, fireGap: "0.25 s", spread: "0–0.5", recoil: 0.0075, auto: false, code: "BLKC" },
+  { name: "Glock 17 Gen 3 / 4 / 5", family: "Glock Family", tier: "Tier 3", ammo: "9mm", damage: 28, mag: 17, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G17" },
+  { name: "Glock 19x", family: "Glock Family", tier: "Tier 3", ammo: "9mm", damage: 28, mag: 17, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G19X" },
+  { name: "Glock 34 Gen 5", family: "Glock Family", tier: "Tier 3", ammo: "9mm", damage: 28, mag: 17, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G34" },
+  { name: "Glock 45", family: "Glock Family", tier: "Tier 3", ammo: "9mm", damage: 28, mag: 17, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "G45" },
+  { name: "PSA Dagger", family: "Glock Family", tier: "Tier 3", ammo: "9mm", damage: 28, mag: 17, fireGap: "0.5 s", spread: "0–0.5", recoil: 0.0085, auto: false, code: "DGR" },
+
+  // Unlisted Tier
+  { name: "Block 17", family: "Other Pistols", tier: "Unlisted", ammo: "9mm", damage: 25, mag: 17, fireGap: "0.25 s", spread: "0–0.5", recoil: 0.0075, auto: false, code: "B17" }
+];
+
+function tierClass(t) {
+  if (t === "Tier 0") return "t0";
+  if (t === "Tier 1") return "t1";
+  if (t === "Tier 2") return "t2";
+  if (t === "Tier 3") return "t3";
+  return "";
+}
+
+/* HORIZONTAL CRATE / RANDOM WHEEL SYSTEM */
+const reelTrack = document.getElementById("reelTrack");
+const rollBtn = document.getElementById("rollBtn");
+const rollBtnText = document.getElementById("rollBtnText");
+const winnerName = document.getElementById("winnerName");
+const winnerStats = document.getElementById("winnerStats");
+const wheelTierSwitch = document.getElementById("wheelTierSwitch");
+
+let selectedWheelTier = "Tier 1";
+let isSpinning = false;
+const CARD_STEP = 164; // 152px card width + 12px gap
+
+function getTierPool(tier) {
+  return weapons.filter(w => w.tier === tier);
+}
+
+function createReelCardHTML(w, isWinner = false) {
+  const tCls = tierClass(w.tier);
+  return `
+    <div class="reel-card ${isWinner ? "winner" : ""}">
+      <div class="reel-badge-box">
+        <div class="gun-emblem ${tCls}">${w.code}</div>
+      </div>
+      <div class="reel-name">${w.name}</div>
+      <div class="reel-sub">${w.tier} · ${w.ammo}</div>
+    </div>
+  `;
+}
+
+function buildStaticReel(tier) {
+  const pool = getTierPool(tier);
+  reelTrack.style.transition = "none";
+  reelTrack.style.transform = "translateX(0px)";
+  let strip = [];
+  for (let i = 0; i < 12; i++) {
+    strip.push(pool[i % pool.length]);
+  }
+  reelTrack.innerHTML = strip.map(w => createReelCardHTML(w, false)).join("");
+  winnerName.textContent = `Ready to roll ${tier} (${pool.length} items)`;
+  winnerStats.innerHTML = `<span class="pill ${tierClass(tier)}">${tier}</span><span>Click ROLL RANDOM to spin</span>`;
+}
+
+wheelTierSwitch.querySelectorAll("button").forEach(btn => {
+  btn.onclick = () => {
+    if (isSpinning) return;
+    wheelTierSwitch.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedWheelTier = btn.dataset.tier;
+    buildStaticReel(selectedWheelTier);
+  };
+});
+
+rollBtn.onclick = () => {
+  if (isSpinning) return;
+  const pool = getTierPool(selectedWheelTier);
+  if (!pool.length) return;
+
+  isSpinning = true;
+  rollBtn.disabled = true;
+  rollBtnText.textContent = "ROLLING...";
+
+  const totalItems = 48;
+  const winIndex = 38;
+  const chosenWinner = pool[Math.floor(Math.random() * pool.length)];
+
+  const strip = [];
+  for (let i = 0; i < totalItems; i++) {
+    if (i === winIndex) {
+      strip.push(chosenWinner);
+    } else {
+      strip.push(pool[Math.floor(Math.random() * pool.length)]);
+    }
+  }
+
+  reelTrack.style.transition = "none";
+  reelTrack.style.transform = "translateX(0px)";
+  reelTrack.innerHTML = strip.map(w => createReelCardHTML(w, false)).join("");
+
+  // Force browser reflow before starting CSS transition
+  void reelTrack.offsetWidth;
+
+  // Add slight natural landing offset inside the winning card (-28px to +28px)
+  const jitter = Math.floor(Math.random() * 56) - 28;
+  const targetX = -(winIndex * CARD_STEP + jitter);
+
+  reelTrack.style.transition = "transform 3.6s cubic-bezier(0.12, 0.85, 0.18, 1)";
+  reelTrack.style.transform = `translateX(${targetX}px)`;
+
+  setTimeout(() => {
+    const cards = reelTrack.querySelectorAll(".reel-card");
+    if (cards[winIndex]) cards[winIndex].classList.add("winner");
+
+    winnerName.textContent = chosenWinner.name;
+    winnerStats.innerHTML = `
+      <span class="pill ${tierClass(chosenWinner.tier)}">${chosenWinner.tier}</span>
+      <span class="pill">${chosenWinner.ammo}</span>
+      <span class="pill">DMG: ${chosenWinner.damage}</span>
+      <span class="pill">MAG: ${chosenWinner.mag}</span>
+      ${chosenWinner.auto ? '<span class="pill auto">AUTO 0.05s</span>' : ''}
+    `;
+
+    isSpinning = false;
+    rollBtn.disabled = false;
+    rollBtnText.textContent = "ROLL RANDOM";
+  }, 3650);
+};
+
+// Initialize default Tier 1 reel on load
+buildStaticReel(selectedWheelTier);
+
+/* WEAPONS CATALOG FILTERING */
+const weaponGrid = document.getElementById("weaponGrid");
+let activeTier = "all";
+let weaponQuery = "";
+
+function renderWeapons() {
+  weaponGrid.innerHTML = "";
+  weapons.forEach(w => {
+    const matchesTier = activeTier === "all" || w.tier === activeTier;
+    const textBlob = `${w.name} ${w.family} ${w.tier} ${w.ammo} ${w.auto ? "automatic" : ""}`.toLowerCase();
+    const matchesQuery = textBlob.includes(weaponQuery);
+    if (!matchesTier || !matchesQuery) return;
+
+    const card = document.createElement("div");
+    card.className = "weapon-item";
+    card.innerHTML = `
+      <div>
+        <div class="weapon-header">
+          <strong>${w.name}</strong>
+          <span class="pill ${tierClass(w.tier)}">${w.tier}</span>
+        </div>
+        <div class="weapon-sub">${w.family} · ${w.ammo}</div>
+        <div class="stat-grid">
+          <div class="stat-box"><small>Damage</small><b>${w.damage}</b></div>
+          <div class="stat-box"><small>Mag</small><b>${w.mag}</b></div>
+          <div class="stat-box"><small>Fire Gap</small><b>${w.fireGap}</b></div>
+          <div class="stat-box"><small>Spread</small><b>${w.spread}</b></div>
+          <div class="stat-box"><small>Recoil</small><b>${w.recoil}</b></div>
+          <div class="stat-box"><small>Mode</small><b>${w.auto ? "Auto" : (w.ammo === "None" ? "Melee" : "Semi")}</b></div>
+        </div>
+      </div>
+      <div class="weapon-badges">
+        <span class="pill">${w.ammo}</span>
+        ${w.auto ? '<span class="pill auto">Automatic (0.05s)</span>' : ''}
+      </div>
+    `;
+    weaponGrid.appendChild(card);
+  });
+}
+
+renderWeapons();
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeTier = btn.dataset.tier;
+    renderWeapons();
+  };
+});
+
+document.getElementById("weaponSearch").addEventListener("input", e => {
+  weaponQuery = e.target.value.toLowerCase();
+  renderWeapons();
+});
+
+document.getElementById("skillSearch").addEventListener("input",e=>{let q=e.target.value.toLowerCase();document.querySelectorAll("#skillTable tbody tr").forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?"":"none")});
+document.getElementById("catalogSearch").addEventListener("input",e=>{let q=e.target.value.toLowerCase();document.querySelectorAll("#catalogGrid .catalog-item").forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?"":"none")});
+</script>
+</body></html>
